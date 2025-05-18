@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bitcoin Clicker</title>
+
+  <!-- Lock to portrait + disable zoom -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input {
+      background: #fff;
+      color: #000;
+    }
+
+    button {
+      background: #f39c12;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #e67e22;
+    }
+
+    #app {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    #top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 0 10px;
+    }
+
+    #balance {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #menu {
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    #menu-options {
+      position: absolute;
+      top: 70px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+
+    #menu-options div {
+      padding: 12px 20px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    #menu-options div:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #bitcoin-img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      margin-top: 30px;
+      box-shadow: 0 0 20px #f39c12;
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    #bitcoin-img:active {
+      transform: scale(1.02);
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Login -->
+  <div id="login">
+    <h2>Login to Earn BTC</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- App -->
+  <div id="app">
+    <div id="top-bar">
+      <div id="balance">0.000000</div>
+      <div id="menu" onclick="toggleMenu()">⋮</div>
+    </div>
+    <div id="menu-options">
+      <div onclick="showBalance()">Balance</div>
+      <div onclick="showWithdraw()">Withdraw</div>
+    </div>
+    <img id="bitcoin-img" src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" onclick="clickBitcoin()" />
+  </div>
+</div>
+
+<script>
+  let balance = 0;
+
+  function login() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if (user && pass) {
+      document.getElementById('login').classList.add('hidden');
+      document.getElementById('app').style.display = 'flex';
+    } else {
+      alert("Please enter both username and password.");
+    }
+  }
+
+  function clickBitcoin() {
+    balance += 0.000001;
+    document.getElementById('balance').textContent = balance.toFixed(6);
+  }
+
+  function toggleMenu() {
+    const menu = document.getElementById('menu-options');
+    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+  }
+
+  function showBalance() {
+    alert("Your balance: " + balance.toFixed(6) + " BTC");
+    toggleMenu();
+  }
+
+  function showWithdraw() {
+    toggleMenu();
+    if (balance < 0.05) {
+      alert("You did not reach the minimum amount");
+    } else {
+      const address = prompt("Enter your Bitcoin address:");
+      if (address && address.length > 10) {
+        alert("Success! Check your wallet after 24 hours.");
+      } else {
+        alert("Please enter a valid BTC address.");
+      }
+    }
+  }
+</script>
+
+</body>
+</html>
